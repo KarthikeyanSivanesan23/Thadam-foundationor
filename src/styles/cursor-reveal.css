@@ -1,0 +1,21 @@
+/* Cursor reveal — two canvas layers, brush-masked with a fading trail. */
+.cursor-reveal {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  contain: paint;
+  pointer-events: auto;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.cursor-reveal__layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}

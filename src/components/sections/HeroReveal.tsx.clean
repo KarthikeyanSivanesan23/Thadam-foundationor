@@ -1,0 +1,60 @@
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+interface HeroRevealProps {
+  baseImage?: string
+  overlayImage?: string
+  heightVh?: number
+  activationThreshold?: number
+  brushRadius?: number
+  trailFade?: number
+}
+
+export function HeroReveal({
+  baseImage = '/images/T1.png',
+  overlayImage = '/images/T2.png',
+  heightVh = 400,
+  activationThreshold = 5,
+  brushRadius = 250,
+  trailFade = 0.05
+}: HeroRevealProps) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const stickyRef = useRef<HTMLDivElement>(null)
+  const baseCanvasRef = useRef<HTMLCanvasElement>(null)
+  const revealCanvasRef = useRef<HTMLCanvasElement>(null)
+  const maskCanvasRef = useRef<HTMLCanvasElement>(null)
+  
+  const baseImgRef = useRef<HTMLImageElement | null>(null)
+  const overlayImgRef = useRef<HTMLImageElement | null>(null)
+  const mouseRef = useRef({ x: -1000, y: -1000, isActive: false })
+  const dprRef = useRef(1)
+  const frameCountRef = useRef(1)
+  const currentFrameRef = useRef({ index: 0, progress: 0 })
+  const tweenRef = useRef<gsap.core.Tween | null>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const sticky = stickyRef.current
+    if (!section || !sticky) return
+
+    dprRef.current = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
+
+    const baseCanvas = baseCanvasRef.current
+    const revealCanvas = revealCanvasRef.current
+    const maskCanvas = maskCanvasRef.current
+    if (!baseCanvas || !revealCanvas || !maskCanvas) return
+
+    const baseCtx = baseCanvas.getContext('2d', { alpha: false })
+    const revealCtx = revealCanvas.getContext('2d', { alpha: true })
+    const maskCtx = maskCanvas.getContext('2d', { alpha: true })
+    if (!baseCtx || !revealCtx || !maskCtx) return
+
+    const setupCanvases = () => {
+      const w = window.innerWidth
+      const h = window.innerHeight
+      const dpr = dprRef.current
+      
+      baseCanva
